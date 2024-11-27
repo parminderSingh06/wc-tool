@@ -7,7 +7,7 @@ import java.io.IOException;
 public class ccwc {
     public static void main(String[] args){
 
-        if(args.length != 2 || !args[0].equals("-c")){
+        if(args.length != 2){
             System.out.println("Error incorrect usage " + args[0]);
             return;
         }
@@ -18,6 +18,7 @@ public class ccwc {
 
     public static void argsDesignater(String argsType, String fileName){
         if(argsType.equals("-c")) getBytes(fileName);
+        else if(argsType.equals("-l")) getLines(fileName);
     }
     
     public static void getBytes(String fileName){
@@ -32,11 +33,34 @@ public class ccwc {
             }
 
             System.out.println(byteCount);
+
         } catch(IOException e){
             System.err.println("Error reading the file: " + e.getMessage());
         }
 
     }
 
-    
+    public static void getLines(String fileName){
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
+            int numLines = 0;
+            boolean moreLines = true;
+
+            while(moreLines){
+                if(reader.readLine() == null){
+                    moreLines = false;
+                }
+                else{
+                    numLines++;
+                }
+            }
+            System.out.println(numLines);
+
+        } catch(IOException e){
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
+
+    }
+
+
 }
