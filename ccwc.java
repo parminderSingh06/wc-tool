@@ -23,6 +23,8 @@ public class ccwc {
         else if(argsType.equals("-l")) getLines(fileName);
 
         else if(argsType.equals("-w")) getWords(fileName);
+
+        else if(argsType.equals("m")) getCharacters(fileName);
     }
     
     public static void getBytes(String fileName){
@@ -70,19 +72,17 @@ public class ccwc {
 
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             int numWords = 0;
-            String currentLine;
-            String[] tempArr;
-            boolean moreLines = true;
+            int currentCodePoint;
+            boolean isWord = false;
 
-            while(moreLines){
-                currentLine = reader.readLine();
-                if(currentLine == null){
-                    moreLines = false;
-                    break;
+            while((currentCodePoint = reader.read()) != -1){
+                if(Character.isWhitespace(currentCodePoint)){
+                    isWord = false;
                 }
-
-                tempArr = currentLine.split("\\s+");
-                numWords += tempArr.length;
+                else if(!isWord){
+                    isWord = true;
+                    numWords++;
+                }
             }
             System.out.println(numWords);
 
@@ -90,6 +90,21 @@ public class ccwc {
             System.err.println("Error reading the file: " + e.getMessage());
         }
 
+    }
+
+    public static void getCharacters(String fileName){
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
+            int characterCount = 0;
+            int currentCodePoint;
+
+            while((currentCodePoint = reader.read()) != -1){
+                characterCount++;
+            }
+            System.out.println(characterCount);
+        } catch(IOException e){
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
     }
 
 }
