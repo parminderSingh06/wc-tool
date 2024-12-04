@@ -24,7 +24,7 @@ public class ccwc {
 
         else if(argsType.equals("-w")) getWords(fileName);
 
-        else if(argsType.equals("m")) getCharacters(fileName);
+        else if(argsType.equals("-m")) getCharacters(fileName);
     }
     
     public static void getBytes(String fileName){
@@ -96,9 +96,8 @@ public class ccwc {
 
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             int characterCount = 0;
-            int currentCodePoint;
 
-            while((currentCodePoint = reader.read()) != -1){
+            while(reader.read() != -1){
                 characterCount++;
             }
             System.out.println(characterCount);
