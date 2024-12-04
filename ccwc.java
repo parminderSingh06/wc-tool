@@ -7,27 +7,35 @@ import java.io.IOException;
 public class ccwc {
     public static void main(String[] args){
 
-        if(args.length != 2){
-            System.out.println("Error incorrect usage " + args[0]);
-            return;
+        if(args.length == 2){
+            argsDesignater(args[0], args[1]);
         }
         
-        argsDesignater(args[0], args[1]);
+        else if(args.length == 1){
+            getAll(args[0]);
+        }
+
 
     }
 
     public static void argsDesignater(String argsType, String fileName){
 
-        if(argsType.equals("-c")) getBytes(fileName);
+        int answer = -1;
 
-        else if(argsType.equals("-l")) getLines(fileName);
+        if(argsType.equals("-c")) answer = getBytes(fileName);
 
-        else if(argsType.equals("-w")) getWords(fileName);
+        else if(argsType.equals("-l")) answer = getLines(fileName);
 
-        else if(argsType.equals("-m")) getCharacters(fileName);
+        else if(argsType.equals("-w")) answer = getWords(fileName);
+
+        else if(argsType.equals("-m")) answer = getCharacters(fileName);
+
+        else if(argsType.equals(null)) getAll(fileName);
+
+        if(answer != -1) System.out.println(answer);
     }
     
-    public static void getBytes(String fileName){
+    public static int getBytes(String fileName){
 
         try(FileInputStream finput = new FileInputStream(fileName)){
             byte[] buffer = new byte[1024];
@@ -38,15 +46,16 @@ public class ccwc {
                 byteCount += bytesRead;
             }
 
-            System.out.println(byteCount);
+            return byteCount;
 
         } catch(IOException e){
             System.err.println("Error reading the file: " + e.getMessage());
+            return -1;
         }
 
     }
 
-    public static void getLines(String fileName){
+    public static int getLines(String fileName){
 
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             int numLines = 0;
@@ -60,15 +69,17 @@ public class ccwc {
                     numLines++;
                 }
             }
-            System.out.println(numLines);
+
+            return numLines;
 
         } catch(IOException e){
             System.err.println("Error reading the file: " + e.getMessage());
+            return -1;
         }
 
     }
 
-    public static void getWords(String fileName){
+    public static int getWords(String fileName){
 
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             int numWords = 0;
@@ -84,15 +95,16 @@ public class ccwc {
                     numWords++;
                 }
             }
-            System.out.println(numWords);
+            return numWords;
 
         } catch(IOException e){
             System.err.println("Error reading the file: " + e.getMessage());
+            return -1;
         }
 
     }
 
-    public static void getCharacters(String fileName){
+    public static int getCharacters(String fileName){
 
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             int characterCount = 0;
@@ -100,10 +112,17 @@ public class ccwc {
             while(reader.read() != -1){
                 characterCount++;
             }
-            System.out.println(characterCount);
+            
+            return characterCount;
+
         } catch(IOException e){
             System.err.println("Error reading the file: " + e.getMessage());
+            return -1;
         }
+    }
+
+    public static void getAll(String fileName){
+        System.out.println(getLines(fileName) + "   " + getWords(fileName) + "  " + getBytes(fileName) + "  " + fileName);
     }
 
 }
