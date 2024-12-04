@@ -1,20 +1,32 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class ccwc {
     public static void main(String[] args){
 
-        if(args.length == 2){
+        if(args.length > 2){
+            System.out.println("Incorrect Usage: ccwc [Option] [File Path]");
+            return;
+        }
+        else if(args.length == 2){
             argsDesignater(args[0], args[1]);
         }
-        
         else if(args.length == 1){
-            getAll(args[0]);
+            File file = new File(args[0]);
+            if(file.exists()) getAll(args[0]);
+            else{
+                handleStdin(true, args[0]);
+            }
         }
-
+        else{
+            handleStdin(false, null);
+        }
 
     }
 
@@ -125,4 +137,24 @@ public class ccwc {
         System.out.println(getLines(fileName) + "   " + getWords(fileName) + "  " + getBytes(fileName) + "  " + fileName);
     }
 
+    public static void handleStdin(boolean isOption, String option){
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            FileWriter writer = new FileWriter("./input.txt");
+            String data;
+
+            while((data = reader.readLine()) != null){
+                writer.write(data);
+                writer.write(System.lineSeparator());
+            }
+
+            writer.close();
+            if(isOption) argsDesignater(option, "input.txt");
+            else{
+                getAll("input.txt");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error reading from standard input: " + e.getMessage());
+        }
+    }
 }
